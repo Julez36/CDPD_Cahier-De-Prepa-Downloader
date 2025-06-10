@@ -16,6 +16,7 @@ pip install requests beautifulsoup4
 
 ## Utilisation 
 Ouvrir le fichier _cdpDumpingUtils.cfg_ et rentrer l'identifiant et le mot de passe de votre compte Cahier-De-Prepa , dans le cas échéant laisser ces deux derniers __vides__.
+Rentrer également l'URL principale de votre Cahier-De-Prépa (le miens étant TSI1 Benjam)
 
 Lancer le script (en l'ouvrant depuis le dossier) avec :
 ```
