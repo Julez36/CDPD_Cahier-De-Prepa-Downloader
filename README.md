@@ -22,16 +22,10 @@ Lancer le script (en l'ouvrant depuis le dossier) avec :
 ```
 python main.py
 ```
-Utiliser les commandes disponibles suivantes : 
-```
---output <chemin>     # Spécifie le répertoire de sauvegarde
---verbose             # Affiche les détails pendant l'exécution
-```
-Exemple d'utilisation :
-```
-python main.py --output "C:\\Utilisateurs\\VotreNom\\Documents\\Prépa" --verbose
-```
-Cet exemple téléchargera l'ensemble du site dans le chemin d'accès répertorié en affichant les détails de l'opération.
+Ou en ouvrant le fichier Start.bat
+
+Maintenant plus qu'à suivre les instructions ! 
+Le mode verbeux (verbose) permet de voir dans la console les opérations qui s'effectuent.
 
 Les fichiers sont classés automatiquement selon l’arborescence du site (par répertoire). Chaque fichier est sauvegardé avec :
 Son nom d’origine (nettoyé si nécessaire)
