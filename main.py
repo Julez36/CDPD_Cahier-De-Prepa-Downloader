@@ -17,20 +17,52 @@ username = None
 password = None
 verbose = False
 
+
+def sanitize_path(path):
+    return re.sub(r'[<>:"/\\|?*\u00a0]', '_', path.strip())
+
+
 def load_config():
     global base_url, username, password
     config = configparser.ConfigParser()
     if os.path.exists(config_file):
-        config.read(config_file)
-        base_url = config.get('DEFAULT', 'base_url', fallback=None)
-        username = config.get('DEFAULT', 'username', fallback=None)
-        password = config.get('DEFAULT', 'password', fallback=None)
+        use_cfg = input("⚙️  Charger les paramètres enregistrés ? (o/n) : ").strip().lower()
+        if use_cfg == 'o':
+            config.read(config_file)
+            base_url = config.get('DEFAULT', 'base_url', fallback=None)
+            username = config.get('DEFAULT', 'username', fallback=None)
+            password = config.get('DEFAULT', 'password', fallback=None)
+
+
+def save_config():
+    config = configparser.ConfigParser()
+    config['DEFAULT'] = {
+        'base_url': base_url or '',
+        'username': username or '',
+        'password': password or ''
+    }
+    with open(config_file, 'w') as configfile:
+        config.write(configfile)
+
 
 def start():
     global output_dir, base_url, username, password, verbose
     load_config()
 
-    log_user = username is not None and password is not None and username != "" and password != ""
+    if not base_url:
+        base_url = input("🔗 URL du Cahier de Prépa : ").strip()
+    if not username:
+        username = input("👤 Identifiant (laisser vide si public) : ").strip()
+    if not password:
+        password = input("🔒 Mot de passe (laisser vide si public) : ").strip()
+    output_dir = input("📁 Dossier de téléchargement : ").strip() or output_dir
+    verbose = input("🗨️ Mode verbeux ? (o/n) : ").strip().lower() == 'o'
+
+    save_cfg = input("💾 Enregistrer ces paramètres pour la prochaine fois ? (o/n) : ").strip().lower()
+    if save_cfg == 'o':
+        save_config()
+
+    log_user = username and password
 
     if base_url.endswith("/"):
         base_url = base_url[:-1]
@@ -60,12 +92,16 @@ def start():
             print("Informations de connexion incorrectes")
             exit()
 
-        print("Connexion réussie")
+        print("✅ Connexion réussie")
+    else:
+        print("🔓 Connexion anonyme activée")
 
     pages = {}
     docs = {}
+    parents = {}
+    all_files = {}
 
-    def explore(explore_page):
+    def explore(explore_page, parent_path=""):
         if verbose:
             print(f"Exploring {base_url}/docs?rep={explore_page}")
 
@@ -87,13 +123,17 @@ def start():
             "Ce contenu est protégé. Vous devez vous connecter pour l'afficher."]:
             return
 
-        pages[explore_page] = sec.find("span", class_="nom").get_text().strip()
+        page_name_raw = sec.find("span", class_="nom").get_text().strip()
+        page_name = sanitize_path(page_name_raw)
+        full_path = os.path.join(parent_path, page_name)
+        pages[explore_page] = full_path
+        parents[explore_page] = parent_path
 
         for r in sec.find_all("a", href=re.compile("rep=")):
             try:
                 page = int(r["href"].split("rep=")[-1])
                 if page not in pages:
-                    explore(page)
+                    explore(page, full_path)
             except ValueError:
                 continue
 
@@ -103,7 +143,11 @@ def start():
             if a_tag and a_tag.has_attr("href"):
                 try:
                     file_id = int(a_tag["href"].split("id=")[-1])
-                    docs[explore_page][file_id] = d.find("span", class_="nom").get_text()
+                    doc_name_raw = d.find("span", class_="nom").get_text()
+                    doc_name = sanitize_path(doc_name_raw)
+                    if doc_name not in all_files:
+                        all_files[doc_name] = file_id
+                        docs[explore_page][file_id] = doc_name
                 except (ValueError, AttributeError):
                     continue
 
@@ -117,7 +161,7 @@ def start():
     nbDoc = 0
     nbDocRef = 0
 
-    for p, page_name in pages.items():
+    for p, full_path in pages.items():
         for file_id, file_name in docs.get(p, {}).items():
             try:
                 dl = session.get(f"{base_url}/download?id={file_id}&dl")
@@ -131,12 +175,12 @@ def start():
                         continue
 
                 ext = mimetypes.guess_extension(content_type.split(';')[0]) or ".pdf"
-                file_name_clean = re.sub(r'[\\/:*?"<>|]', '_', file_name) + ext
+                file_name_clean = file_name + ext
 
                 if verbose:
                     print(f"Téléchargement de {file_name_clean}...")
 
-                file_path = os.path.join(output_dir, page_name, file_name_clean)
+                file_path = os.path.join(output_dir, full_path, file_name_clean)
                 os.makedirs(os.path.dirname(file_path), exist_ok=True)
 
                 with open(file_path, "wb") as f:
@@ -148,6 +192,7 @@ def start():
 
     print(f"{nbDoc} documents téléchargés")
     print(f"{nbDocRef} documents protégés")
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Cahier de Prépa - Download Tool")
