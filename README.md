@@ -3,7 +3,7 @@ Un utilitaire afin d'automatiser le téléchargement de l'ensemble des fichiers 
 Le projet reste libre à la modification et à l'amélioration, tout n'est pas parfait (notamment sur la gestion de l'identifiant et des mots de passes qui restent très amateur).
 Libre à chacun de modifier le code à sa guise en fonction de ses besoins, il est perfectible et il en a besoin.
 Merci beaucoup à *[Azuxul](https://github.com/Azuxul/cahier-de-prepa-downloader)* d'avoir conçu en premier un projet de ce type, je m'en suis bien inspiré.
-Je me suis par ailleurs aidé de l'IA puisque je n'ai que des conaissances amateur en programmation (notament uniquement à but scientifique).
+Je me suis par ailleurs aidé de l'IA puisque je n'ai que des conaissances amateur en programmation (uniquement à but scientifique).
 
 ***Avis de non responsabilité : Cet utilitaire n'a pas pour but de violer les propriétés intellectuelles, mais simplement de pouvoir fournir un utilitaire fiable et efficace à l'ensemble des étudiants utilisants CDP afin de télécharger les fichiers déposés par les professeurs. Ce projet respecte les conditions d'utilisation du site Cahier-de-Prépa. Il ne contourne pas les protections des fichiers non autorisés et suppose que l'utilisateur dispose des droits d'accès nécessaires.***
 
