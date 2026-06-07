@@ -9,10 +9,10 @@ Je me suis par ailleurs aidé de l'IA puisque je n'ai que des conaissances amate
 
 ## Installation
 Installer python [Python3](https://www.python.org/downloads/) 
-Installer ensuite (si besoin, mais fortement recommandé) la bibliothèque requests et beautifulsoup4  :
+Installer ensuite (si besoin, mais fortement recommandé) la bibliothèque requests et beautifulsoup4 (via le CMD)  :
 ```
 pip install requests
-pip install requests beautifulsoup4
+pip install beautifulsoup4
 ```
 
 ## Utilisation 
