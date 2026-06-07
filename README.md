@@ -16,17 +16,17 @@ pip install beautifulsoup4
 ```
 
 ## Utilisation 
-Ouvrir le fichier _cdpDumpingUtils.cfg_ et rentrer l'identifiant et le mot de passe de votre compte Cahier-De-Prepa , dans le cas échéant laisser ces deux derniers __vides__.
+Dans le cas où vous devez modifier vos paramètres : ouvrir le fichier _cdpDumpingUtils.cfg_ et rentrer l'identifiant et le mot de passe de votre compte Cahier-De-Prepa , dans le cas échéant laisser ces deux derniers __vides__.
 Rentrer également l'URL principale de votre Cahier-De-Prépa (le miens étant TSI1 Benjam)
+Dans le cas le plus basique, le programme vous demandera de rentrer les paramètres d emanière guidée.
 
 Lancer le script (en l'ouvrant depuis le dossier) avec :
 ```
 python main.py
 ```
-Ou en ouvrant le fichier Start.bat
+Ou en ouvrant le fichier Start.bat (j'ignore pourquoi mais en privilège élevés, le programme plante).
 
 Maintenant plus qu'à suivre les instructions ! 
-Le mode verbeux (verbose) permet de voir dans la console les opérations qui s'effectuent.
 
 Les fichiers sont classés automatiquement selon l’arborescence du site (par répertoire). Chaque fichier est sauvegardé avec :
 Son nom d’origine (nettoyé si nécessaire)
